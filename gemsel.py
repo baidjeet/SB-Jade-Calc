@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
@@ -7,9 +8,15 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 import time
 
-def fetch_gem_prices_with_selenium(query):
+def fetch_gem_prices_with_selenium(query, headless=False): # IF YOU WANT IT TO SHOW THE CHROME BROWSER OPENING UP CHANGE "headless=True" INTO -> "headless=False"
     service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service)
+    options = Options()
+    
+    if headless:
+        options.add_argument("--headless")
+        options.add_argument("--disable-gpu")  # Sometimes needed if running on Windows
+
+    driver = webdriver.Chrome(service=service, options=options)
     prices = {}
     try:
         driver.get(f"https://www.skyblock.bz/search?query={query}")
@@ -40,7 +47,7 @@ def get_user_input():
     return quantities
 
 def calculate_crafting_profit(prices, quantities):
-    tax_rate = 1.011  # 1.1% tax
+    tax_rate = 1.011  # 1.1% tax (EDIT THIS IF YOU HAVE A DIFFERENT TAX BASED ON PROFILE UPGRADES)
 
     # Constants for the number of gemstones needed for crafting
     rough_to_flawed_ratio = 80
@@ -59,7 +66,7 @@ def calculate_crafting_profit(prices, quantities):
     possible_flawless_from_fine = total_fine // fine_to_flawless_ratio
     remaining_fine = total_fine % fine_to_flawless_ratio
 
-    # Revenue calculations with tax consideration
+    # Revenue calculations with tax 
     sell_as_rough_revenue = quantities['Rough Jade Gemstone'] * prices['Rough Jade Gemstone']['Sell Price'] / tax_rate
     sell_as_flawed_revenue = quantities['Flawed Jade Gemstone'] * prices['Flawed Jade Gemstone']['Sell Price'] / tax_rate
     sell_as_fine_revenue = quantities['Fine Jade Gemstone'] * prices['Fine Jade Gemstone']['Sell Price'] / tax_rate
@@ -102,7 +109,6 @@ def calculate_crafting_profit(prices, quantities):
 
 
     # Include decision-making for the best strategy
-    # (The detailed crafting and decision logic goes here, similar to previous messages)
 
 def main():
     gem_type = 'jade'

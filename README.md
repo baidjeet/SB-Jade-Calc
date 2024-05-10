@@ -9,4 +9,9 @@ Before running the script, you need to install the required Python packages:
 ```bash
 python -m pip install -r requirements.txt
 
+```
+
+### Notes
+
+Currently with the use of selenium it loads the required data on the skyblock.bz website.
 
