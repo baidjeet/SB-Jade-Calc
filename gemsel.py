@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 import time
 
-def fetch_gem_prices_with_selenium(query, headless=False): # IF YOU WANT IT TO SHOW THE CHROME BROWSER OPENING UP CHANGE "headless=True" INTO -> "headless=False"
+def fetch_gem_prices_with_selenium(query, headless=True): # IF YOU WANT IT TO SHOW THE CHROME BROWSER OPENING UP CHANGE "headless=True" INTO -> "headless=False"
     service = Service(ChromeDriverManager().install())
     options = Options()
     
